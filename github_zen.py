@@ -14,3 +14,63 @@
     ===================
 """
 
+import argparse
+import requests
+import time
+from datetime import datetime
+
+
+# Instantiate and describes what program does when help is
+# called on the module.
+parser = argparse.ArgumentParser(
+    prog="GitZen",
+    description="Zen of Git"
+)
+parser.add_argument(
+    "-n", "--num",
+    type=int,
+    default=1,
+    choices=[ value for value in range(1, 6) ],
+    help= "Defines the number of zen to retrieve. \
+Max of 5 and Min of 1. Defaults to 1 if flag not used in invocation"
+)
+parser.add_argument(
+    "out",
+    type=str,
+    choices=[ "log", "txt", ],
+    help = "Defines where zen would be rendered. (required)"
+)
+
+# Retrieve all values supplied to arguments on program
+# invocation
+
+args = parser.parse_args()
+zens_to_retrieve = args.num
+output = args.out
+
+# Compute file name to be generic on every run using date &
+# replace all spaces on datetime by underscores and colons
+# by hyphens. This is so file name can meet supported naming
+# format.
+date_time_list = datetime.now().strftime("%c").split(" ")
+time_list = "_".join(date_time_list).split(":")
+file_name = "-".join(time_list)
+file_name_and_extension = f"{file_name}.{output}"
+
+# Zen retrieval engine
+if output != "log":
+    file = open(f"{file_name_and_extension}", "w")
+    while zens_to_retrieve > 0:
+        time.sleep(20)
+        response = requests.get("https://api.github.com/zen")
+        file.write(f"> {response.text}\n")
+        zens_to_retrieve -= 1
+    file.close()
+else:
+    while zens_to_retrieve > 0:
+        time.sleep(20)
+        response = requests.get("https://api.github.com/zen")
+        print(f"> {response.text}")
+        zens_to_retrieve -= 1
+    
+
