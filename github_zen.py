@@ -1,9 +1,8 @@
 """
-    Codebase is a simplified approach on how to implement
-    command line argument in python with argparse library.
+    Simplified approach describing how command line argument
+    are implement in python with argparse library.
 
     
-
     ===================
     python version: 3.8
     code lesson url:
@@ -20,8 +19,8 @@ import time
 from datetime import datetime
 
 
-# Instantiate and describes what program does when help is
-# called on the module.
+# Instantiate ArgumentParser and provide it with program name &
+# description. To be shown when --help is called on program module
 parser = argparse.ArgumentParser(
     prog="GitZen",
     description="Zen of Git"
@@ -48,7 +47,7 @@ args = parser.parse_args()
 zens_to_retrieve = args.num
 output = args.out
 
-# Compute file name to be generic on every run using date &
+# Create a different file name on every run with datetime lib. &
 # replace all spaces on datetime by underscores and colons
 # by hyphens. This is so file name can meet supported naming
 # format.
